@@ -20,8 +20,9 @@ def predict_main(input_date, input_race_number, input_ground):
     print("出馬表読み込み完了")
     '''
     ground_id = convert_ground_to_id(input_ground)
-
+    print(ground_id)
     folder_path = os.path.join(input_date + input_ground)
+    print(folder_path)
     # ファイルパターンを指定
     file_pattern = os.path.join(folder_path, f"{input_date}{ground_id}{input_race_number}*.json")
     
