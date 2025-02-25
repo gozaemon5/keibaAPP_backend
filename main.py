@@ -20,12 +20,12 @@ def predict_main(input_date, input_race_number, input_ground):
     print("出馬表読み込み完了")
     '''
     ground_id = convert_ground_to_id(input_ground)
-    print(ground_id)
+    # print(ground_id)
     folder_path = os.path.join("出馬表データ",input_date + input_ground)
-    print(folder_path)
+    # print(folder_path)
     # ファイルパターンを指定
     file_pattern = os.path.join(folder_path, f"{input_date}{ground_id}{input_race_number}*.json")
-    print(file_pattern)
+    # print(file_pattern)
     
     # 該当するファイルを検索
     json_files = glob.glob(file_pattern)
@@ -84,7 +84,7 @@ def predict_main(input_date, input_race_number, input_ground):
     })
     
     # 複勝確率の高い順に並べ替え
-    results = results.sort_values(by="複勝確率", ascending=False)
+    # results = results.sort_values(by="複勝確率", ascending=False)
     
     # result_race_name = input_data["レース名"].iloc[0]
     print(results)
