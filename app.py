@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from main import main
-
+from main import predict_main
 app = Flask(__name__)
 CORS(app)
 
@@ -18,7 +17,7 @@ def predict():
         input_ground = data.get('input_ground')
 
         # main関数を直接呼び出す
-        results = main(input_date, input_race_number, input_ground)
+        results = predict_main(input_date, input_race_number, input_ground)
         print("main処理完了")
 
         # DataFrameを辞書に変換
