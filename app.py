@@ -1,23 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pandas as pd
-import joblib
-from preprocessing import RaceDataPreprocessor
+from main import main
 
 app = Flask(__name__)
 CORS(app)
-
-# 学習済みモデルとスケーラー、エンコーダーの読み込み
-model = joblib.load("horse_race_model.pkl")
-scaler = joblib.load('scaler.pkl')
-label_encoders = joblib.load('label_encoders.pkl')
-onehot_encoders = joblib.load('onehot_encoder.pkl')
-
-# 前処理の準備
-preprocessor = RaceDataPreprocessor()
-preprocessor.scaler = scaler  # preprocessorのスケーラーを更新
-preprocessor.label_encoders = label_encoders  # preprocessorのエンコーダーを更新
-preprocessor.onehot_encoder = onehot_encoders  # preprocessorのワンホットエンコーダーを更新
 
 @app.route('/process', methods=['POST'])
 def predict():
@@ -25,28 +11,21 @@ def predict():
         # JSON形式のデータを受け取る
         data = request.get_json()
         print("Received data:", data)  # 受け取ったデータをログに表示
-        
-        # JSONデータをDataFrameに変換
-        df_predict = pd.DataFrame(data)
-        
-        # 前処理（予測時はtransform）
-        df_predict_processed = preprocessor.transform(df_predict)
-        
-        # 予測
-        X_predict = df_predict_processed.drop(columns=["race_id", "馬", "着順"])  # 必要な列だけを残す
-        y_pred_prob = model.predict_proba(X_predict)[:, 1]  # 3着以内になる確率
-        
-        # 予測結果をデータフレームに追加
-        df_predict["複勝確率"] = y_pred_prob
-        
-        # 確率が高い順にソート
-        df_predict_sorted = df_predict.sort_values("複勝確率", ascending=False)
-        
-        # 結果をJSON形式で返す 
-        result = df_predict_sorted[["馬", "複勝確率"]].to_dict(orient="records")
-        print("Reasult data:", result)  # 返す結果をログに表示
+
+        # 必要なデータを抽出
+        input_date = data.get('input_date')
+        input_race_number = data.get('input_race_number')
+        input_ground = data.get('input_ground')
+
+        # main関数を直接呼び出す
+        results = main(input_date, input_race_number, input_ground)
+        print("main処理完了")
+
+        # DataFrameを辞書に変換
+        result = results.to_dict(orient='records')
+        # 結果をJSONとして返す
         return jsonify(result)
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
