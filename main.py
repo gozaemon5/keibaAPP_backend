@@ -25,6 +25,7 @@ def predict_main(input_date, input_race_number, input_ground):
     print(folder_path)
     # ファイルパターンを指定
     file_pattern = os.path.join(folder_path, f"{input_date}{ground_id}{input_race_number}*.json")
+    print(file_pattern)
     
     # 該当するファイルを検索
     json_files = glob.glob(file_pattern)
