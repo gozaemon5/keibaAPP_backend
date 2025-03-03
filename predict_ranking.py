@@ -35,6 +35,8 @@ def predict_ranking_proba(input_data, processed_data):
     processed_data["normalized_pred_proba"] = processed_data.groupby("race_id")["pred_proba"].transform(
     lambda x: x / x.sum()
     )
-    '''  
+    ''' 
+    processed_data["normalized_pred_proba"] = processed_data["pred_proba"]
+
     return processed_data
     
