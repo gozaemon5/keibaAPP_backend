@@ -30,11 +30,11 @@ def predict_ranking_proba(input_data, processed_data):
 
     processed_data["race_id"] = input_data["race_id"].values  # 同じ順序で race_id を割り当てる
 
-
+    '''
     # 各レースIDごとに確率を正規化
     processed_data["normalized_pred_proba"] = processed_data.groupby("race_id")["pred_proba"].transform(
     lambda x: x / x.sum()
     )
-   
+    '''  
     return processed_data
     
